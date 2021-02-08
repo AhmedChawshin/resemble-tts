@@ -1,7 +1,6 @@
 # Resemble-tts
 A TTS with your custom voice on twitch.tv
 
-
 ## Configuration
 
 ### You need to retrieve your oauth token and channel reward it on twitch. 
@@ -18,3 +17,14 @@ Your API key should be here: https://app.resemble.ai/account/api
 
 And the voice ID should be located here: https://app.resemble.ai/voices. 
 
+## Installation
+This script require nodejs installed on your computer
+
+1. Download the folder and run this command to download all the npm inside the path:
+```bash
+npm install
+```
+2. visit modules > config.js and add your configuration details. 
+```bash
+node index.js
+```
