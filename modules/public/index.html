@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>TTS for obs scene</title>
+</head>
+
+<body>
+    <script type='text/javascript'>
+
+        const mediaFiles = [];
+        let currentlyPlaying = false;
+
+        async function requestLatestTTS() {
+            const res = await fetch('/api').then(res => res.json()).catch(console.error);
+            if (!res || !res.link) {
+                console.log('No TTS queued.')
+                return;
+            }
+
+            const context = new AudioContext();
+            const buffer = await fetch(res.link).then(res => res.arrayBuffer())
+            const decoded = await context.decodeAudioData(buffer);
+            console.log({ decoded, buffer })
+            mediaFiles.push(decoded);
+            playNewestMediaFile();
+        }
+
+        async function playNewestMediaFile() {
+            const newestBuffer = mediaFiles[0];
+            if (!newestBuffer || currentlyPlaying) {
+                return;
+            }
+            const context = new AudioContext();
+            const source = context.createBufferSource();
+            source.connect(context.destination);
+            source.buffer = newestBuffer;
+            source.start(0);
+
+            currentlyPlaying = true;
+            mediaFiles.shift(); // Remove the file
+
+            source.addEventListener('ended', () => {
+                console.log('done with file', newestBuffer);
+                currentlyPlaying = false;
+                playNewestMediaFile();
+            })
+        }
+
+        // Poll every two seconds
+        setInterval(requestLatestTTS, 2000);
+    </script>
+</body>
+
+</html>
