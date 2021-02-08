@@ -29,4 +29,4 @@ npm install
 node index.js
 ```
 
-2. Go ahead and visit the localhost and add it as an browser source on obs. 
+3. Go ahead and visit the localhost and add it as an browser source on obs. 
